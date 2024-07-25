@@ -1,1 +1,8 @@
+When you exec into postgres, use the following commands to navigate around;
+To see all available tables; \dt
+To exit; \q
+To list all databases; \l or \list
+create db; CREATE DATABASE database_name;
+connect to db; \c database_name
+to list all users; \du
 
