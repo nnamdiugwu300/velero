@@ -1,4 +1,5 @@
 When you exec into postgres, use the following commands to navigate around;
+when you exec into the container run this to get into the psql shell; psql -U postgres
 To see all available tables; \dt
 To exit; \q
 To list all databases; \l or \list
