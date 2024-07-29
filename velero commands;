@@ -1,0 +1,41 @@
+velero instalation; 
+  wget https://github.com/vmware-tanzu/velero/releases/download/v1.10.0/velero-v1.10.0-linux-amd64.tar.gz
+ tar -xvf velero-v1.10.0-linux-amd64.tar.gz
+  sudo mv velero-v1.10.0-linux-amd64/velero /usr/local/bin/
+use this page to get info on how to set up backupstore;
+https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure
+-- use access key and az login
+this is what credentials velero should look like; 
+root@rprshk8smasterv01:~# cat credentials-velero
+AZURE_STORAGE_ACCOUNT_ACCESS_KEY=yourazure key
+AZURE_CLOUD_NAME=AzurePublicCloud
+-- Use this command to install velero after creating backup store and setting evn variables;
+ velero install     --provider azure     --plugins velero/velero-plugin-for-microsoft-azure:v1.10.0     --bucket $BLOB_CONTAINER     --secret-file ./credentials-velero     --backup-location-config resourceGroup=$AZURE_BACKUP_RESOURCE_GROUP,storageAccount=$AZURE_STORAGE_ACCOUNT_ID,storageAccountKeyEnvVar=AZURE_STORAGE_ACCOUNT_ACCESS_KEY[,subscriptionId=$AZURE_BACKUP_SUBSCRIPTION_ID]     --use-volume-snapshots=false
+
+After installation create this file and apply; 
+root@rprshk8smasterv01:~# cat backupstoragelocation.yaml
+apiVersion: velero.io/v1
+kind: BackupStorageLocation
+metadata:
+  labels:
+    component: velero
+  name: default
+  namespace: velero
+spec:
+  config:
+    resourceGroup: velero
+    storageAccount: camhvelero
+    storageAccountKeyEnvVar: AZURE_STORAGE_ACCOUNT_ACCESS_KEY
+    subscriptionId: a8ee3477-e71b-4e6a-bcd6-14f6d86ca840
+  default: true
+  objectStorage:
+    bucket: velero
+  provider: azure
+
+    
+other commands
+     velero backup create postgres --include-namespaces velero-test
+   velero backup describe postgres
+    velero restore create --from-backup postgres
+
+
