@@ -37,5 +37,8 @@ other commands
      velero backup create postgres --include-namespaces velero-test
    velero backup describe postgres
     velero restore create --from-backup postgres
+kubectl describe backupstoragelocation backup1
+ 1576  kubectl get backupstoragelocation -n velero
+ 1577  kubectl describe backupstoragelocation default -n velero
 
 
